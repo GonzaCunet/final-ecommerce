@@ -3,6 +3,7 @@ interface ButtonProps {
   size?: "sm" | "md" | "lg";
   children: React.ReactNode;
   onClick?: () => void;
+  className?: string;
 }
 
 export const Button = ({
@@ -10,6 +11,7 @@ export const Button = ({
   size = "md",
   children,
   onClick,
+  className,
 }: ButtonProps) => {
   const baseClasses =
     "font-medium rounded-lg transition-all duration-200 ease-in-out cursor-pointer focus:outline-none";
@@ -28,7 +30,7 @@ export const Button = ({
 
   return (
     <button
-      className={`${baseClasses} ${variantClasses[variant]} ${sizeClasses[size]}`}
+      className={` ${baseClasses} ${variantClasses[variant]} ${sizeClasses[size]} ${className}`}
       onClick={onClick}
       type="button"
     >

@@ -11,6 +11,7 @@ export const Input = ({ placeholder, type, value, onChange }: InputProps) => {
       type={type}
       value={value}
       onChange={onChange}
-    ></input>
+      className="border border-black rounded-[8px] font-bold placeholder-gray-400 text-center"
+    />
   );
 };
