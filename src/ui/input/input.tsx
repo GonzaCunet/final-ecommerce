@@ -2,7 +2,7 @@ interface InputProps {
   placeholder?: string;
   type?: "password" | "text" | "email";
   value: any;
-  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   size?: "sm" | "md" | "lg";
 }
 export const Input = ({
