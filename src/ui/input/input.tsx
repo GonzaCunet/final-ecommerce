@@ -23,7 +23,7 @@ export const Input = ({
       type={type}
       value={value}
       onChange={onChange}
-      className={`border-3 border-black rounded-[8px] font-bold placeholder-gray-400 text-center ${sizeClasses[size]}`}
+      className={`border-3 border-black rounded-[8px] font-bold placeholder-gray-300 text-gray-500 text-center ${sizeClasses[size]}`}
     />
   );
 };
