@@ -2,19 +2,29 @@
 import { use, useState } from "react";
 import { Button } from "@/ui/button/button";
 import { Input } from "@/ui/input/input";
-import { fetchApi, sendAuthEmail, sendCodeGetToken } from "lib/api";
+import { fetchApi, sendAuthEmail, sendCodeGetToken } from "@/lib/api";
+import useUserStore from "store/userInfo";
+import { useRouter } from "next/navigation";
 
 export default function Login() {
   const [mail, setMail] = useState("");
   const [send, setSend] = useState(false);
   const [code, setCode] = useState("");
+  const router = useRouter();
+  const saveToken = useUserStore((state) => state.setToken);
+  const saveMail = useUserStore((state) => state.setMail);
+  const savename = useUserStore((state) => state.setName);
+  // const clearState = useUserStore((state) => state.logOut);
   const handleCode = () => {
-    console.log(mail, code);
-    sendCodeGetToken(mail, Number(code)).then((res) => console.log(res));
+    sendCodeGetToken(mail, Number(code))
+      .then((res) => saveToken(res))
+      .then(() => saveMail(mail));
+    router.push("/");
   };
 
   const handleMail = () => {
     setSend(true);
+
     sendAuthEmail(mail);
   };
 

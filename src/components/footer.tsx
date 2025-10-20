@@ -1,7 +1,13 @@
+"use client";
 import { Button } from "@/ui/button/button";
 import Link from "next/link";
+import useUserStore from "store/userInfo";
 
 export function Footer() {
+  const clearState = useUserStore((state) => state.logOut);
+  const handleLogOut = () => {
+    clearState();
+  };
   return (
     <div className="bg-black w-full h-full">
       <div
@@ -10,10 +16,12 @@ export function Footer() {
     "
       >
         <div className="flex flex-col items-start space-y-2 p-5">
-          <Link href="/">Ingresar</Link>
-          <Link href="/">Mi perfil</Link>
-          <Link href="/">Buscar</Link>
-          <Link href="/">Logout</Link>
+          <Link href="/login">Ingresar</Link>
+          <Link href="/myprofile">Mi perfil</Link>
+          <Link href="/search">Buscar</Link>
+          <Link href="/" onClick={handleLogOut}>
+            Logout
+          </Link>
         </div>
 
         <div className="flex flex-col items-end space-y-2 p-5">

@@ -3,20 +3,31 @@ import Image from "next/image";
 import { Card } from "@/ui/card/card";
 import { Input } from "@/ui/input/input";
 import { Button } from "@/ui/button/button";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 export default function Home() {
+  const [query, setQuery] = useState("");
+  const router = useRouter();
+  const handleSearch = () => {
+    if (query) {
+      router.push(`/search?search=${query}`);
+    }
+  };
   return (
     <div className="w-full h-full bg-white text-black flex flex-col items-center justify-between gap-5 ">
       <h1>El Mejor E-commerce</h1>
       <Input
         placeholder="Encontrá tu producto ideal"
         type="text"
-        value=""
+        value={query}
         onChange={(e) => {
-          console.log("hola");
+          setQuery(e.target.value);
         }}
       />
-      <Button variant="blue">Buscar</Button>
+      <Button variant="blue" onClick={handleSearch}>
+        Buscar
+      </Button>
       <div
         className="w-full h-full bg-primary-pink text-white font-bold flex flex-col items-center gap-5 p-10
       xl:bg-primary-light-blue xl:text-black "
