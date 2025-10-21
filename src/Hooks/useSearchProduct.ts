@@ -9,8 +9,10 @@ export function useProductSearch({
   limit: number;
   offset: number;
 }) {
-  const { data, error, isLoading } = useSWR(
-    `/search?search=${search}&limit=${limit}&offset=${offset}`,
+  const searchParams = search ? `&search=${encodeURIComponent(search)}` : "";
+  const endpoint = `/search?limit=${limit}&offset=${offset}${searchParams}`;
+  const { data, error, isLoading, mutate } = useSWR(
+    search && search.trim() ? endpoint : null,
     fetchApi
   );
 
@@ -18,5 +20,11 @@ export function useProductSearch({
   //   if (isLoading) return <div>loading...</div>;
 
   //   // render data
-  return { data, error, isLoading };
+  return {
+    products: data?.results || [],
+    total: data?.pagination.total || 0,
+    isLoading,
+    isError: error,
+    mutate,
+  };
 }

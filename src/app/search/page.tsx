@@ -4,65 +4,104 @@ import { Card } from "@/ui/card/card";
 import { Input } from "@/ui/input/input";
 import { Button } from "@/ui/button/button";
 import Link from "next/link";
-import useSWR from "swr";
 import { useProductSearch } from "./../../Hooks/useSearchProduct";
+import { useSearchParams, useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 
 export default function Search() {
-  const { data, error, isLoading } = useProductSearch({
-    search: "table",
-    limit: 10,
-    offset: 0,
-  });
-  {
-    console.log(data);
-  }
+  const router = useRouter();
+  const [searchTerm, setSearchTerm] = useState("");
+  const [inputValue, setInputValue] = useState("");
+  const [currentPage, setCurrentPage] = useState(0);
+  const searchParams = useSearchParams();
 
+  useEffect(() => {
+    const query = searchParams?.get("search");
+    if (query) {
+      setSearchTerm(query);
+      setInputValue(query);
+    } else {
+      setSearchTerm("");
+      setInputValue("");
+    }
+    setCurrentPage(0);
+  }, [searchParams]);
+  const limit = 3;
+  const offset = currentPage * limit;
+  const { products, isError, isLoading, total } = useProductSearch({
+    search: searchTerm,
+    limit,
+    offset,
+  });
+  const handleButtonInput = () => {
+    setSearchTerm(inputValue.trim());
+    router.push(`/search?search=${encodeURIComponent(inputValue.trim())}`);
+  };
+  const totalPages = Math.ceil(total / limit);
   return (
-    <div className="w-full h-full bg-white text-black flex flex-col items-center justify-between gap-5 ">
-      <div>
-        {data.map((r: any) => {
-          return <span>{r.name}</span>;
+    <div className="w-full h-full bg-white text-black flex flex-col items-center justify-between gap-5 p-10 ">
+      <div className="flex flex-col gap-5">
+        <Input
+          placeholder="Encontrá tu producto ideal"
+          type="text"
+          value={inputValue}
+          onChange={(e) => {
+            setInputValue(e.target.value);
+          }}
+        />
+        <Button variant="blue" onClick={handleButtonInput}>
+          Buscar
+        </Button>
+      </div>
+      <h1 className="font-bold p-2"> Resultados: {total} </h1>
+      <div className="flex flex-col xl:flex-row gap-5">
+        {products.map((r: any) => {
+          return (
+            <Card
+              key={r.objectID}
+              img={r.Images[0].thumbnails.large.url}
+              title={r.Name}
+              price={r["Unit cost"]}
+            />
+          );
         })}
       </div>
-      <h1>hola soy el search</h1>
-      <Input
-        placeholder="Encontrá tu producto ideal"
-        type="text"
-        value=""
-        onChange={(e) => {
-          console.log("hola");
-        }}
-      />
-      <Button variant="blue">Buscar</Button>
-      <div
-        className="w-full h-full bg-primary-pink text-white font-bold flex flex-col items-center gap-5 p-10
-      xl:bg-primary-light-blue xl:text-black "
-      >
-        <div className="items-center text-center">
-          <h1>
-            PRODUCTOS <br />
-            DESTACADOS
-          </h1>
+      {isLoading && <span>Cargando...</span>}
+      {searchTerm && totalPages > 1 && (
+        <div className="flex justify-center items-center gap-4 mt-8">
+          {currentPage > 0 ? (
+            <Button
+              variant="blue"
+              size="sm"
+              onClick={() => setCurrentPage(currentPage - 1)}
+            >
+              Anterior
+            </Button>
+          ) : (
+            <div className="w-[172px] h-[37px] rounded-[8px] bg-gray-300 flex items-center justify-center">
+              <span className="text-gray-500 text-sm">Anterior</span>
+            </div>
+          )}
+
+          <span className="text-gray-600">
+            Página {currentPage + 1} de {totalPages}
+          </span>
+
+          {currentPage < totalPages - 1 ? (
+            <Button
+              variant="blue"
+              size="sm"
+              onClick={() => setCurrentPage(currentPage + 1)}
+            >
+              Siguiente
+            </Button>
+          ) : (
+            <div className="w-[172px] h-[37px] rounded-[8px] bg-gray-300 flex items-center justify-center">
+              <span className="text-gray-500 text-sm">Siguiente</span>
+            </div>
+          )}
         </div>
-        <div className="flex flex-col gap-10 xl:flex-row ">
-          <Card
-            img="https://media.istockphoto.com/id/1389297600/es/foto/reloj-de-pared-aislado-sobre-un-fondo-blanco-reloj-blanco-redondo-con-agujas-negras-recortadas.jpg?s=612x612&w=0&k=20&c=kfFmeizrhfur7DY65nsmQulJpJQUgcdvvOomW_gD0xE="
-            title="Relojazo"
-            price={250}
-          />
-          <Card
-            img="https://media.istockphoto.com/id/1389297600/es/foto/reloj-de-pared-aislado-sobre-un-fondo-blanco-reloj-blanco-redondo-con-agujas-negras-recortadas.jpg?s=612x612&w=0&k=20&c=kfFmeizrhfur7DY65nsmQulJpJQUgcdvvOomW_gD0xE="
-            title="Relojazo"
-            price={250}
-          />
-          <Card
-            img="https://media.istockphoto.com/id/1389297600/es/foto/reloj-de-pared-aislado-sobre-un-fondo-blanco-reloj-blanco-redondo-con-agujas-negras-recortadas.jpg?s=612x612&w=0&k=20&c=kfFmeizrhfur7DY65nsmQulJpJQUgcdvvOomW_gD0xE="
-            title="Relojazo"
-            price={250}
-          />
-        </div>
-        <Link href="/search"> Ver más...</Link>
-      </div>
+      )}
     </div>
   );
 }
