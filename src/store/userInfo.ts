@@ -11,7 +11,7 @@ type userStoreState = {
   logOut: () => void;
 };
 
-const useUserStore = create<userStoreState>()(
+export const useUserStore = create<userStoreState>()(
   persist(
     (set) => ({
       token: "",
@@ -25,5 +25,3 @@ const useUserStore = create<userStoreState>()(
     { name: "user-LocalStorage" }
   )
 );
-
-export default useUserStore;

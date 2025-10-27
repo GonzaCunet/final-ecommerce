@@ -3,7 +3,7 @@ import { use, useState } from "react";
 import { Button } from "@/ui/button/button";
 import { Input } from "@/ui/input/input";
 import { fetchApi, sendAuthEmail, sendCodeGetToken } from "@/lib/api";
-import useUserStore from "store/userInfo";
+import { useUserStore } from "@/store/userInfo";
 import { useRouter } from "next/navigation";
 
 export default function Login() {
@@ -17,7 +17,7 @@ export default function Login() {
   // const clearState = useUserStore((state) => state.logOut);
   const handleCode = () => {
     sendCodeGetToken(mail, Number(code))
-      .then((res) => saveToken(res))
+      .then((res) => saveToken(res.token))
       .then(() => saveMail(mail));
     router.push("/");
   };

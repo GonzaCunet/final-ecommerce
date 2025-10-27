@@ -21,7 +21,7 @@ export default function Home() {
         placeholder="Encontrá tu producto ideal"
         type="text"
         value={query}
-        onChange={(e) => {
+        onChange={(e: any) => {
           setQuery(e.target.value);
         }}
       />

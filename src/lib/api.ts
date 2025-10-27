@@ -4,15 +4,16 @@ interface FetchOptions extends RequestInit {
   headers?: HeadersInit;
 }
 
-/**
- * Función simplificada para hacer peticiones a la API
- * @param endpoint - Ruta del endpoint (ej: "/auth", "/products")
- * @param options - Opciones del fetch (method, body, headers, etc)
- * @returns Promise con los datos de la respuesta
- */
 export async function fetchApi(endpoint: string, options?: FetchOptions) {
   try {
-    const response = await fetch(`${API_URL}${endpoint}`, {
+    // const isClient = typeof window !== "undefined";
+    // const url = isClient
+    //   ? `/api/${endpoint}`
+    //   : `${API_URL}/${normalized}`;
+    const url = `${API_URL}${endpoint}`;
+    console.log("Fetching API URL:", url);
+
+    const response = await fetch(url, {
       ...options,
       headers: {
         "Content-Type": "application/json",
@@ -20,11 +21,13 @@ export async function fetchApi(endpoint: string, options?: FetchOptions) {
       },
     });
 
-    const data = await response.json();
+    const text = await response.text();
+    const data = text ? JSON.parse(text) : null;
 
     if (!response.ok) {
       throw new Error(
-        data.message || `Error ${response.status}: ${response.statusText}`
+        (data && data.message) ||
+          `Error ${response.status}: ${response.statusText}`
       );
     }
 
@@ -60,11 +63,12 @@ export async function patchUser(
   phone: number,
   token: string
 ) {
-  return fetchApi("/api/me", {
+  return fetchApi("/me", {
     method: "PATCH",
     body: JSON.stringify({ name, address, phone }),
     headers: {
       Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
     },
   });
 }

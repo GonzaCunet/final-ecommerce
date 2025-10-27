@@ -1,0 +1,101 @@
+"use client";
+import { useEffect, useState } from "react";
+import { Input } from "@/ui/input/input";
+import { Button } from "@/ui/button/button";
+import usePatchUser from "@/Hooks/usePatchUser";
+import { useUserStore } from "@/store/userInfo";
+import { useRouter } from "next/navigation";
+import ProtectedRoute from "@/middleware";
+
+export default function profilePage() {
+  const storeName = useUserStore((s) => s.name);
+  const storeMail = useUserStore((s) => s.mail);
+  const token = useUserStore((s) => s.token);
+  const router = useRouter();
+
+  const { updateUser, isLoading, error } = usePatchUser();
+
+  const [name, setName] = useState(storeName ?? "");
+  const [address, setAddress] = useState("");
+  const [phone, setPhone] = useState("");
+  const [feedback, setFeedback] = useState<string | null>(null);
+
+  useEffect(() => {
+    setName(storeName ?? "");
+  }, [storeName]);
+
+  const handleSave = async () => {
+    setFeedback(null);
+    try {
+      await updateUser({
+        name: name.trim(),
+        address: address.trim(),
+        phone: Number(phone) || 0,
+      });
+      setFeedback("Guardado correctamente");
+      router.push("/");
+    } catch (e: any) {
+      setFeedback(e?.message ?? "Error al guardar");
+    }
+  };
+
+  return (
+    <ProtectedRoute>
+      <div className="w-full h-full bg-white flex flex-col items-start xl:items-center xl:justify-center p-10 gap-4">
+        <div className="flex flex-col xl:items-start items-center gap-5">
+          <h1 className="text-black !font-extrabold text-2xl">Perfil</h1>
+          <div className="flex flex-col gap-1 w-full max-w-[720px]">
+            <span className="text-black">Email</span>
+            <Input
+              placeholder=" "
+              type="text"
+              value={storeMail ?? ""}
+              onChange={() => {}}
+            />
+
+            <span className="text-black">Nombre completo</span>
+            <Input
+              placeholder=" "
+              type="text"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+            />
+
+            <span className="text-black">Dirección</span>
+            <Input
+              placeholder=" "
+              type="text"
+              value={address}
+              onChange={(e) => setAddress(e.target.value)}
+            />
+
+            <span className="text-black">Teléfono</span>
+            <Input
+              placeholder=" "
+              type="text"
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
+            />
+          </div>
+
+          <Button
+            variant="yellow"
+            size="md"
+            onClick={handleSave}
+            className="!text-black !font-bold"
+          >
+            {isLoading ? "Guardando..." : "Guardar"}
+          </Button>
+
+          {feedback && <div className="text-sm text-black">{feedback}</div>}
+          {error && (
+            <div className="text-sm text-red-600">
+              Error: {error.message ?? "Algo falló"}
+            </div>
+          )}
+        </div>
+      </div>
+      //{" "}
+    </ProtectedRoute>
+  );
+}

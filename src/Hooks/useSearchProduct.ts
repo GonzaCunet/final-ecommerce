@@ -1,5 +1,6 @@
 import useSWR from "swr";
 import { fetchApi } from "@/lib/api";
+
 export function useProductSearch({
   search,
   limit,

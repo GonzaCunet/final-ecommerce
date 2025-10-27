@@ -2,7 +2,7 @@
 import { Button } from "@/ui/button/button";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import useUserStore from "store/userInfo"; // <-- nueva importación
+import { useUserStore } from "@/store/userInfo"; // <-- nueva importación
 
 export function Header() {
   const [open, setOpen] = useState(false);

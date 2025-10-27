@@ -37,6 +37,9 @@ export default function Search() {
     setSearchTerm(inputValue.trim());
     router.push(`/search?search=${encodeURIComponent(inputValue.trim())}`);
   };
+  const handleItemClick = (id: string) => () => {
+    router.push(`/item/${id}`);
+  };
   const totalPages = Math.ceil(total / limit);
   return (
     <div className="w-full h-full bg-white text-black flex flex-col items-center justify-between gap-5 p-10 ">
@@ -62,6 +65,7 @@ export default function Search() {
               img={r.Images[0].thumbnails.large.url}
               title={r.Name}
               price={r["Unit cost"]}
+              onClick={handleItemClick(r.objectID)}
             />
           );
         })}

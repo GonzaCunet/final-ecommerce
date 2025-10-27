@@ -2,11 +2,15 @@ interface CardProps {
   img: string;
   title: string;
   price: number;
+  onClick?: () => void; //
 }
 
-export const Card = ({ img, title, price }: CardProps) => {
+export const Card = ({ img, title, price, onClick }: CardProps) => {
   return (
-    <div className="flex flex-col border-4 border-black rounded-[8px] w-[315px] h-[321px] overflow-hidden">
+    <div
+      className="flex flex-col border-4 border-black rounded-[8px] w-[315px] h-[321px] overflow-hidden cursor-pointer"
+      onClick={onClick}
+    >
       <div className="flex-shrink-0 h-[237px] overflow-hidden">
         <img src={img} alt={title} className="w-full h-full object-cover" />
       </div>
