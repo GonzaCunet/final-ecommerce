@@ -1,11 +1,14 @@
 import { Button } from "../button/button";
+import { useRouter } from "next/navigation";
 interface itemProps {
   img: string;
   title: string;
   price: number;
+  onClick: () => void;
 }
 
-export const Item = ({ img, title, price }: itemProps) => {
+export const Item = ({ img, title, price, onClick }: itemProps) => {
+  const router = useRouter();
   return (
     <div className="bg-white flex flex-col xl:flex-row items-center justify-center w-full h-full overflow-hidden pb-4">
       <div className="flex-shrink-0 p-10">
@@ -23,7 +26,10 @@ export const Item = ({ img, title, price }: itemProps) => {
         <span className="text-black font-extrabold text-[20px] flex-shrink-0">
           ${" " + price}
         </span>
-        <Button className="bg-primary-light-blue-700 !text-black !font-extrabold text-[20px] flex-shrink-0">
+        <Button
+          className="bg-primary-light-blue-700 !text-black !font-extrabold text-[20px] flex-shrink-0"
+          onClick={onClick}
+        >
           Comprar
         </Button>
         <span className="text-black w-[316px] h-[76px]">

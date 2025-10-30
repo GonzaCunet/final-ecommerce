@@ -4,6 +4,7 @@ interface InputProps {
   value: any;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   size?: "sm" | "md" | "lg";
+  className?: string;
 }
 export const Input = ({
   placeholder,
@@ -11,6 +12,7 @@ export const Input = ({
   value,
   onChange,
   size = "md",
+  className = "",
 }: InputProps) => {
   const sizeClasses = {
     sm: "w-[172px] h-[37px] rounded-[8px] text-sm",
@@ -23,7 +25,7 @@ export const Input = ({
       type={type}
       value={value}
       onChange={onChange}
-      className={`border-3 border-black rounded-[8px] font-bold placeholder-gray-300 text-gray-500 text-center ${sizeClasses[size]}`}
+      className={`border-3 border-black rounded-[8px] font-bold placeholder-gray-300 text-gray-500 text-center ${sizeClasses[size]} ${className}`}
     />
   );
 };

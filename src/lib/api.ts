@@ -72,3 +72,13 @@ export async function patchUser(
     },
   });
 }
+
+export async function sendOrder(itemId: string, token: string) {
+  return fetchApi(`/order?id=${itemId}`, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+  });
+}

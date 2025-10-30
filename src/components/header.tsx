@@ -1,24 +1,26 @@
 "use client";
 import { Button } from "@/ui/button/button";
 import { useState } from "react";
-import { useRouter } from "next/navigation";
-import { useUserStore } from "@/store/userInfo"; // <-- nueva importación
+import { useUserStore } from "@/store/userInfo";
+import Link from "next/link"; // <-- nueva importación
+import { useRouter, useSearchParams } from "next/navigation";
+import SearchComponent from "@/ui/search/search";
 
 export function Header() {
   const [open, setOpen] = useState(false);
   const router = useRouter();
-  const userMail = useUserStore((state) => state.mail);
+  const email = useUserStore((state) => state.mail);
+  const authenticated = useUserStore((state) => state.isAuthenticated);
   const clearState = useUserStore((state) => state.logOut);
+  const params = useSearchParams();
+  const query = params.get("search");
 
+  const [inputValue, setInputValue] = useState("");
+  const handleButtonInput = () => {
+    router.push(`/search?search=${encodeURIComponent(inputValue.trim())}`);
+  };
   function handleBurguerMenu() {
     setOpen(!open);
-  }
-  function handleSignIn() {
-    router.push("/login");
-  }
-  function handleLogOut() {
-    clearState();
-    router.push("/");
   }
 
   return (
@@ -26,22 +28,29 @@ export function Header() {
       <a href="/">
         <img src="/logo.svg" className="invert" />
       </a>
-
-      {userMail ? (
-        <button
-          className="hidden xl:inline-block text-white font-semibold truncate max-w-[200px] text-left"
-          onClick={() => handleLogOut()}
-          title={userMail}
-        >
-          {userMail}
-          <p className="text-[#E75A7C]">Cerrar sesión</p>
-        </button>
+      <SearchComponent
+        inputValue={inputValue}
+        setInputValue={setInputValue}
+        handleButtonInput={handleButtonInput}
+      ></SearchComponent>
+      {authenticated ? (
+        <>
+          <Link
+            className="hidden xl:inline-block text-white font-semibold truncate max-w-[200px] text-left cursor-pointer "
+            href="/"
+            onClick={() => clearState()}
+          >
+            {email}
+            <p className="text-[#E75A7C]">Cerrar sesión</p>
+          </Link>
+        </>
       ) : (
         <Button
           variant="pink"
-          size="sm"
           className="hidden xl:block"
-          onClick={handleSignIn}
+          onClick={() => {
+            router.push("/login");
+          }}
         >
           INGRESAR
         </Button>
@@ -54,24 +63,49 @@ export function Header() {
       />
       {open && (
         <div className="absolute top-full right-0 bg-black w-full p-4 z-50 text-center font-bold flex flex-col gap-5 xl:hidden">
-          {userMail ? (
+          {authenticated ? (
             <>
-              <button onClick={() => router.push("/myprofile")}>
-                {userMail}
-              </button>
-              <button onClick={() => router.push("/myprofile")}>
+              <Link
+                className="cursor-pointer"
+                href="/myprofile"
+                onClick={() => setOpen(false)}
+              >
                 Mi perfil
-              </button>
-              <button onClick={() => router.push("/search")}>Buscar</button>
-              <button onClick={handleLogOut}>Logout</button>
+              </Link>
+              <Link
+                className="cursor-pointer"
+                href="/search"
+                onClick={() => setOpen(false)}
+              >
+                Buscar
+              </Link>
+
+              {email && (
+                <>
+                  <p>{email}</p>
+                  <p
+                    className="text-[#E75A7C] cursor-pointer"
+                    onClick={() => {
+                      setOpen(false);
+                      clearState();
+                    }}
+                  >
+                    Cerrar sesión
+                  </p>
+                </>
+              )}
             </>
           ) : (
             <>
-              <button onClick={handleSignIn}>Ingresar</button>
-              <button onClick={() => router.push("/myprofile")}>
+              <Link href="/login" onClick={() => setOpen(false)}>
+                Ingresar
+              </Link>
+              <Link href="/myprofile" onClick={() => setOpen(false)}>
                 Mi perfil
-              </button>
-              <button onClick={() => router.push("/search")}>Buscar</button>
+              </Link>
+              <Link href="/search" onClick={() => setOpen(false)}>
+                Buscar
+              </Link>
             </>
           )}
         </div>

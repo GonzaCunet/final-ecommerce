@@ -6,7 +6,7 @@ import { fetchApi } from "@/lib/api";
  * - No hace fetch si id es falsy (key === null)
  */
 export default function useItemSearch(id: string) {
-  const endpoint = id ? `/products/?productId=${encodeURIComponent(id)}` : null;
+  const endpoint = id ? `/products?productId=${encodeURIComponent(id)}` : null;
 
   const { data, error, isLoading, mutate } = useSWR(
     endpoint,

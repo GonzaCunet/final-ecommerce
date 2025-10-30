@@ -7,6 +7,7 @@ import Link from "next/link";
 import { useProductSearch } from "./../../Hooks/useSearchProduct";
 import { useSearchParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import SearchComponent from "@/ui/search/search";
 
 export default function Search() {
   const router = useRouter();
@@ -43,19 +44,6 @@ export default function Search() {
   const totalPages = Math.ceil(total / limit);
   return (
     <div className="w-full h-full bg-white text-black flex flex-col items-center justify-between gap-5 p-10 ">
-      <div className="flex flex-col gap-5">
-        <Input
-          placeholder="Encontrá tu producto ideal"
-          type="text"
-          value={inputValue}
-          onChange={(e) => {
-            setInputValue(e.target.value);
-          }}
-        />
-        <Button variant="blue" onClick={handleButtonInput}>
-          Buscar
-        </Button>
-      </div>
       <h1 className="font-bold p-2"> Resultados: {total} </h1>
       <div className="flex flex-col xl:flex-row gap-5">
         {products.map((r: any) => {

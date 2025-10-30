@@ -3,11 +3,16 @@ import { Item } from "@/ui/item/item";
 import { useParams } from "next/navigation";
 import { useEffect } from "react";
 import useItemSearch from "@/Hooks/useItemSearch"; // ajustá si tu hook es default export
+import { useRouter } from "next/navigation";
 
 export default function ItemPage() {
   const params = useParams();
   const id = params?.id ?? "";
   const { product, isLoading, isError } = useItemSearch(id as any);
+  const router = useRouter();
+  function handleClick() {
+    router.push(`/checkout/${id}`);
+  }
 
   useEffect(() => {
     if (!id) return;
@@ -45,7 +50,7 @@ export default function ItemPage() {
 
   return (
     <div className="bg-white">
-      <Item img={img} title={title} price={price} />
+      <Item img={img} title={title} price={price} onClick={handleClick} />
     </div>
   );
 }

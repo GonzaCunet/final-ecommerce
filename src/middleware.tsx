@@ -2,7 +2,7 @@
 
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { useUserStore } from "./store/userInfo";
+import { useUserStore } from "@/store/userInfo";
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
@@ -14,15 +14,16 @@ export default function ProtectedRoute({
   fallback,
 }: ProtectedRouteProps) {
   const router = useRouter();
-  const isAuthenticated = useUserStore((state) => state.token);
+  const isAuthenticated = useUserStore((state) => state.isAuthenticated);
+  const hasHydrated = useUserStore((state) => state.hasHydrated);
 
   useEffect(() => {
-    if (!isAuthenticated) {
-      router.push("/login");
+    if (hasHydrated && !isAuthenticated) {
+      router.push("/signin");
     }
-  }, [isAuthenticated, router]);
+  }, [hasHydrated, isAuthenticated, router]);
 
-  if (!isAuthenticated) {
+  if (!hasHydrated || !isAuthenticated) {
     return (
       fallback || (
         <div className="flex items-center justify-center min-h-screen">

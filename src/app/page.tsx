@@ -16,7 +16,7 @@ export default function Home() {
   };
   return (
     <div className="w-full h-full bg-white text-black flex flex-col items-center justify-between gap-5 ">
-      <h1>El Mejor E-commerce</h1>
+      <h1 className="">El Mejor E-commerce</h1>
       <Input
         placeholder="Encontrá tu producto ideal"
         type="text"

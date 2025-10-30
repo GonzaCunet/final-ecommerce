@@ -1,41 +1,51 @@
 "use client";
+import { useUserStore } from "@/store/userInfo";
 import { useEffect, useState } from "react";
 import { Input } from "@/ui/input/input";
 import { Button } from "@/ui/button/button";
 import usePatchUser from "@/Hooks/usePatchUser";
-import { useUserStore } from "@/store/userInfo";
 import { useRouter } from "next/navigation";
 import ProtectedRoute from "@/middleware";
+import Swal from "sweetalert2";
 
 export default function profilePage() {
   const storeName = useUserStore((s) => s.name);
   const storeMail = useUserStore((s) => s.mail);
   const token = useUserStore((s) => s.token);
   const router = useRouter();
-
   const { updateUser, isLoading, error } = usePatchUser();
 
   const [name, setName] = useState(storeName ?? "");
   const [address, setAddress] = useState("");
   const [phone, setPhone] = useState("");
-  const [feedback, setFeedback] = useState<string | null>(null);
 
   useEffect(() => {
     setName(storeName ?? "");
   }, [storeName]);
 
   const handleSave = async () => {
-    setFeedback(null);
     try {
       await updateUser({
         name: name.trim(),
         address: address.trim(),
         phone: Number(phone) || 0,
       });
-      setFeedback("Guardado correctamente");
-      router.push("/");
+      Swal.fire({
+        text: "Datos guardados",
+        icon: "success",
+        confirmButtonColor: "#4f7cac",
+        iconColor: "#4f7cac",
+      }).then(() => {
+        router.push("/");
+      });
     } catch (e: any) {
-      setFeedback(e?.message ?? "Error al guardar");
+      Swal.fire({
+        title: "Error",
+        text: `${e.message ? e.message : "Error al acceder"}`,
+        icon: "error",
+        confirmButtonColor: "#4f7cac",
+        iconColor: "#4f7cac",
+      });
     }
   };
 
@@ -86,16 +96,8 @@ export default function profilePage() {
           >
             {isLoading ? "Guardando..." : "Guardar"}
           </Button>
-
-          {feedback && <div className="text-sm text-black">{feedback}</div>}
-          {error && (
-            <div className="text-sm text-red-600">
-              Error: {error.message ?? "Algo falló"}
-            </div>
-          )}
         </div>
       </div>
-      //{" "}
     </ProtectedRoute>
   );
 }
