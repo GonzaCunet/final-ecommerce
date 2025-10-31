@@ -31,8 +31,8 @@ export default function usePatchUser() {
         if (res.email) setMail(res.email);
       }
       return res;
-    } catch (err: any) {
-      setError(err);
+    } catch (err) {
+      setError(err as Error);
       throw err;
     } finally {
       setIsLoading(false);

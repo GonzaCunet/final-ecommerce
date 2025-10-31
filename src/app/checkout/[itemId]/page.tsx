@@ -3,7 +3,7 @@ import { sendOrder } from "@/lib/api";
 import { useUserStore } from "@/store/userInfo";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect } from "react";
-export default function checkOut() {
+export default function CheckOut() {
   const router = useRouter();
   const token = useUserStore((s) => s.token);
   const searchParams = useParams();

@@ -38,10 +38,10 @@ export default function ProfilePage() {
       }).then(() => {
         router.push("/");
       });
-    } catch (e: any) {
+    } catch (e: unknown) {
       Swal.fire({
         title: "Error",
-        text: `${e.message ? e.message : "Error al acceder"}`,
+        text: `${e instanceof Error ? e.message : "Error al acceder"}`,
         icon: "error",
         confirmButtonColor: "#4f7cac",
         iconColor: "#4f7cac",

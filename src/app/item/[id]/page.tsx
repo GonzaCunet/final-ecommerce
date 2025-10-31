@@ -8,7 +8,7 @@ import { useRouter } from "next/navigation";
 export default function ItemPage() {
   const params = useParams();
   const id = params?.id ?? "";
-  const { product, isLoading, isError } = useItemSearch(id as any);
+  const { product, isLoading, isError } = useItemSearch(id as string);
   const router = useRouter();
   function handleClick() {
     router.push(`/checkout/${id}`);
