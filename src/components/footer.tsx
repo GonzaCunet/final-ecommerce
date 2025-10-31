@@ -1,6 +1,7 @@
 "use client";
 import Link from "next/link";
 import { useUserStore } from "@/store/userInfo";
+import Image from "next/image";
 
 export default function Footer() {
   const clearState = useUserStore((state) => state.logOut);
@@ -26,8 +27,8 @@ export default function Footer() {
 
         <div className="flex flex-col items-end space-y-2 p-5">
           <span className="w-full text-white">Redes</span>
-          <img src="twitter.svg" alt="Twitter" />
-          <img src="instagram.svg" alt="Instagram" />
+          <Image src="twitter.svg" alt="Twitter" />
+          <Image src="instagram.svg" alt="Instagram" />
           <div className="flex flex-col gap-[5px]" />
         </div>
       </div>

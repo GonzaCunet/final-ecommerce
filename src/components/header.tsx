@@ -6,6 +6,8 @@ import Link from "next/link"; // <-- nueva importación
 import { useRouter, useSearchParams } from "next/navigation";
 import SearchComponent from "@/ui/search/search";
 import { usePathname } from "next/navigation";
+import Image from "next/image";
+
 export function Header() {
   const [open, setOpen] = useState(false);
   const router = useRouter();
@@ -25,7 +27,7 @@ export function Header() {
   return (
     <header className="bg-black w-full h-full flex justify-between items-center p-8 text-white relative">
       <Link href="/">
-        <img src="logo.svg" className="invert" />
+        <Image src="logo.svg" className="invert" alt="Logo" />
       </Link>
       {searchPath ? (
         <SearchComponent
@@ -56,10 +58,11 @@ export function Header() {
           INGRESAR
         </Button>
       )}
-      <img
+      <Image
         src="burguer.svg"
         className="h-[52px] w-[40px] xl:hidden"
         onClick={handleBurguerMenu}
+        alt={"Menu"}
       />
       {open && (
         <div className="absolute top-full right-0 bg-black w-full p-4 z-50 text-center font-bold flex flex-col gap-5 xl:hidden">
