@@ -5,16 +5,15 @@ import { useUserStore } from "@/store/userInfo";
 import Link from "next/link"; // <-- nueva importación
 import { useRouter, useSearchParams } from "next/navigation";
 import SearchComponent from "@/ui/search/search";
-
+import { usePathname } from "next/navigation";
 export function Header() {
   const [open, setOpen] = useState(false);
   const router = useRouter();
   const email = useUserStore((state) => state.mail);
   const authenticated = useUserStore((state) => state.isAuthenticated);
   const clearState = useUserStore((state) => state.logOut);
-  const params = useSearchParams();
-  const query = params.get("search");
-
+  const pathName = usePathname();
+  const searchPath = pathName === "/search";
   const [inputValue, setInputValue] = useState("");
   const handleButtonInput = () => {
     router.push(`/search?search=${encodeURIComponent(inputValue.trim())}`);
@@ -25,14 +24,16 @@ export function Header() {
 
   return (
     <header className="bg-black w-full h-full flex justify-between items-center p-8 text-white relative">
-      <a href="/">
+      <Link href="/">
         <img src="/logo.svg" className="invert" />
-      </a>
-      <SearchComponent
-        inputValue={inputValue}
-        setInputValue={setInputValue}
-        handleButtonInput={handleButtonInput}
-      ></SearchComponent>
+      </Link>
+      {searchPath ? (
+        <SearchComponent
+          inputValue={inputValue}
+          setInputValue={setInputValue}
+          handleButtonInput={handleButtonInput}
+        ></SearchComponent>
+      ) : null}
       {authenticated ? (
         <>
           <Link
@@ -55,7 +56,6 @@ export function Header() {
           INGRESAR
         </Button>
       )}
-
       <img
         src="/burguer.svg"
         className="h-[52px] w-[40px] xl:hidden"

@@ -46,6 +46,7 @@ export default function Search() {
     <div className="w-full h-full bg-white text-black flex flex-col items-center justify-between gap-5 p-10 ">
       <h1 className="font-bold p-2"> Resultados: {total} </h1>
       <div className="flex flex-col xl:flex-row gap-5">
+        {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
         {products.map((r: any) => {
           return (
             <Card

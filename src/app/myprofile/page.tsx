@@ -8,7 +8,7 @@ import { useRouter } from "next/navigation";
 import ProtectedRoute from "@/middleware";
 import Swal from "sweetalert2";
 
-export default function profilePage() {
+export default function ProfilePage() {
   const storeName = useUserStore((s) => s.name);
   const storeMail = useUserStore((s) => s.mail);
   const token = useUserStore((s) => s.token);

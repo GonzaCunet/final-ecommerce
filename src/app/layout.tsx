@@ -26,10 +26,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="es">
-      <body className="bg-white">
+      <body>
         {" "}
         {/* asegurar fondo blanco */}
-        <div className="min-h-screen flex flex-col bg-white">
+        <div className="min-h-screen flex flex-col">
           <Header />
           <main className="flex-1">{children}</main>{" "}
           {/* flex-1 para ocupar espacio */}
