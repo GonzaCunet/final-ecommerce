@@ -27,7 +27,7 @@ export function Header() {
   return (
     <header className="bg-black w-full h-full flex justify-between items-center p-8 text-white relative">
       <Link href="/">
-        <Image src="logo.svg" className="invert" alt="Logo" />
+        <Image src="Logo.svg" className="invert" alt="Logo" />
       </Link>
       {searchPath ? (
         <SearchComponent
@@ -59,7 +59,7 @@ export function Header() {
         </Button>
       )}
       <Image
-        src="burguer.svg"
+        src="Burguer.svg"
         className="h-[52px] w-[40px] xl:hidden"
         onClick={handleBurguerMenu}
         alt={"Menu"}
