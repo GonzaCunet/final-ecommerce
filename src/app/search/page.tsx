@@ -6,10 +6,10 @@ import { Button } from "@/ui/button/button";
 import Link from "next/link";
 import { useProductSearch } from "./../../Hooks/useSearchProduct";
 import { useSearchParams, useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense } from "react";
 import SearchComponent from "@/ui/search/search";
 
-export default function Search() {
+function SearchContent() {
   const router = useRouter();
   const [searchTerm, setSearchTerm] = useState("");
   const [inputValue, setInputValue] = useState("");
@@ -27,6 +27,7 @@ export default function Search() {
     }
     setCurrentPage(0);
   }, [searchParams]);
+
   const limit = 3;
   const offset = currentPage * limit;
   const { products, isError, isLoading, total } = useProductSearch({
@@ -34,14 +35,18 @@ export default function Search() {
     limit,
     offset,
   });
+
   const handleButtonInput = () => {
     setSearchTerm(inputValue.trim());
     router.push(`/search?search=${encodeURIComponent(inputValue.trim())}`);
   };
+
   const handleItemClick = (id: string) => () => {
     router.push(`/item/${id}`);
   };
+
   const totalPages = Math.ceil(total / limit);
+
   return (
     <div className="w-full h-full bg-white text-black flex flex-col items-center justify-between gap-5 p-10 ">
       <h1 className="font-bold p-2"> Resultados: {total} </h1>
@@ -96,5 +101,19 @@ export default function Search() {
         </div>
       )}
     </div>
+  );
+}
+
+export default function Search() {
+  return (
+    <Suspense
+      fallback={
+        <div className="w-full h-full flex items-center justify-center">
+          Cargando...
+        </div>
+      }
+    >
+      <SearchContent />
+    </Suspense>
   );
 }
